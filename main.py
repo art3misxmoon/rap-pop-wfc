@@ -20,9 +20,10 @@ for i, track in enumerate(midi.tracks):
 # each element of the array is either:
 # a string "off" meaning the instrument isn't playing
 # a string "on-off" meaning the instrument stops on that beat
-# a string "on" meaning the instrumnt is playing
+# a string "on" meaning the instrument is playing
 # a string "off-on" meaning the instrument starts on that beat
 
 # step 3: make a list of 'blocks', representing every possible 1/4 note segment (16 units of time)
 # each block contains a two-item array for each instrument, with each element a string (same definitions as above)
 # each element of the array represents one of two subdivisions, or an 1/8 note
+# in addition, it should contain two arrays, each one containing possibles adjacencies before/after the block.
