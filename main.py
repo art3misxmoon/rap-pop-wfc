@@ -16,7 +16,7 @@ for i, track in enumerate(midi.tracks):
         print(msg)
 
 # step 2: parse the MidiFile and translate to a structure we can use
-# 1 array for each instrument, and each element of the array representing 12 units of time. 
+# 1 array for each instrument, and each element of the array representing 8 units of time. 
 # each element of the array is either:
 # a string "off" meaning the instrument isn't playing
 # a string "on-off" meaning the instrument stops on that beat
