@@ -66,7 +66,7 @@ for i in timelines:
 # step 3: make a list of 'blocks', representing every possible 1/4 note segment (96 units of time)
 # each block contains an array for each instrument, with each element a string (same definitions as above)
 # each element of the array represents one of four subdivisions, or a 1/16 note
-# in addition, it should contain two arrays, each one containing possibles adjacencies before/after the block.
+# in addition, it should contain two dictionaries, each one containing possibles adjacencies and their probabilities before/after the block.
 
 class Block:
     def __init__(name, yeah, bell, bigSynth, alarm, highSynth, backgroundVocals, ahAh, snare, bass, bongo, spaceySynth, synth, adjacencies1):
