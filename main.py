@@ -69,7 +69,8 @@ for i in timelines:
 # in addition, it should contain two arrays, each one containing possibles adjacencies before/after the block.
 
 class Block:
-    def __init__(yeah, bell, bigSynth, alarm, highSynth, backgroundVocals, ahAh, snare, bass, bongo, spaceySynth, synth, adjacencies1):
+    def __init__(name, yeah, bell, bigSynth, alarm, highSynth, backgroundVocals, ahAh, snare, bass, bongo, spaceySynth, synth, adjacencies1):
+        self.id = name
         self.yeah = yeah
         self.bell = bell
         self.bigSynth = bigSynth
