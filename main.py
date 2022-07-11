@@ -69,7 +69,7 @@ for i in timelines:
 # in addition, it should contain two dictionaries, each one containing possibles adjacencies and their probabilities before/after the block.
 
 class Block:
-    def __init__(name, yeah, bell, bigSynth, alarm, highSynth, backgroundVocals, ahAh, snare, bass, bongo, spaceySynth, synth, adjacencies1):
+    def __init__(self, name, yeah, bell, bigSynth, alarm, highSynth, backgroundVocals, ahAh, snare, bass, bongo, spaceySynth, synth, adjacencies1):
         self.id = name
         self.yeah = yeah
         self.bell = bell
@@ -84,3 +84,8 @@ class Block:
         self.spaceySynth = spaceySynth
         self.synth = synth
         self.adjacencies1 = adjacencies1
+
+    def isEqual(self, b):
+        if self.id == b.id and self.yeah == b.yeah and self.bell == b.bell and self.bigSynth == b.bigSynth and self.alarm == b.alarm and self.highSynth == b.highSynth and self.backgroundVocals == b.backgroundVocals and self.ahAh == b.ahAh and self.snare == b.snare and self.bass == b.bass and self.bongo == b.bongo and self.spaceySynth == b.spaceySynth and self.synth == b.synth:
+            return True
+        return False
