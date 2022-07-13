@@ -113,3 +113,39 @@ class Block:
             self.yeah == b.yeah):
             return True
         return False
+
+Blocks = []
+subdivisions_per_block = 4
+for i in range(int(len(timelines[0])/subdivisions_per_block)):
+    if i == 0:
+        Blocks.append(Block(
+            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
+            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
+            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
+            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
+            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
+            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
+            {}, {i+1: 1}))
+    elif i > 0 and i < int(len(timelines[0])/subdivisions_per_block) - 1:
+        Blocks.append(Block(
+            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
+            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
+            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
+            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
+            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
+            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
+            {i-1: 1}, {i+1: 1}))
+    elif i == int(len(timelines[0])/subdivisions_per_block) - 1:
+        Blocks.append(Block(
+            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
+            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
+            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
+            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
+            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
+            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
+            {i-1: 1}, {}))
+
+# prints with repeats
+for i in range(5): 
+    print("*****", Blocks[i].id, "*****")
+    print(vars(Blocks[i]))
