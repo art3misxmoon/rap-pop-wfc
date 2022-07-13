@@ -97,7 +97,7 @@ class Block:
         self.synth = synth
         self.adjacencies1 = adjacencies1
 
-    def is_equal(self, b):
+    def __eq__(self, b):
         if (self.id == b.id and
             self.yeah == b.yeah and
             self.bell == b.bell and
