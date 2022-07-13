@@ -81,7 +81,7 @@ class Block:
     def __init__(
             self, name, yeah, bell, big_synth, alarm, high_synth,
             background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth,
-            adjacencies1):
+            adjacencies1, adjacencies2):
         self.id = name
         self.yeah = yeah
         self.bell = bell
@@ -96,10 +96,10 @@ class Block:
         self.spacey_synth = spacey_synth
         self.synth = synth
         self.adjacencies1 = adjacencies1
+        self.adjacencies2 = adjacencies2
 
     def __eq__(self, b):
-        if (self.id == b.id and
-            self.yeah == b.yeah and
+        if (self.yeah == b.yeah and
             self.bell == b.bell and
             self.big_synth == b.big_synth and
             self.alarm == b.alarm and
