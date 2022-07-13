@@ -79,37 +79,37 @@ for i in timelines:
 
 class Block:
     def __init__(
-            self, name, yeah, bell, big_synth, alarm, high_synth,
-            background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth,
+            self, name, synth, spacey_synth, bongo, bass, snare, ah_ah,
+            background_vocals, high_synth, alarm, big_synth, bell, yeah,
             adjacencies1, adjacencies2):
         self.id = name
-        self.yeah = yeah
-        self.bell = bell
-        self.big_synth = big_synth
-        self.alarm = alarm
-        self.high_synth = high_synth
-        self.background_vocals = background_vocals
-        self.ah_ah = ah_ah
-        self.snare = snare
-        self.bass = bass
-        self.bongo = bongo
-        self.spacey_synth = spacey_synth
         self.synth = synth
+        self.spacey_synth = spacey_synth
+        self.bongo = bongo
+        self.bass = bass
+        self.snare = snare
+        self.ah_ah = ah_ah
+        self.background_vocals = background_vocals
+        self.high_synth = high_synth
+        self.alarm = alarm
+        self.big_synth = big_synth
+        self.bell = bell
+        self.yeah = yeah
         self.adjacencies1 = adjacencies1
         self.adjacencies2 = adjacencies2
 
     def __eq__(self, b):
-        if (self.yeah == b.yeah and
-            self.bell == b.bell and
-            self.big_synth == b.big_synth and
-            self.alarm == b.alarm and
-            self.high_synth == b.high_synth and
-            self.background_vocals == b.background_vocals and
-            self.ah_ah == b.ah_ah and
-            self.snare == b.snare and
-            self.bass == b.bass and
-            self.bongo == b.bongo and
+        if (self.synth == b.synth and
             self.spacey_synth == b.spacey_synth and
-            self.synth == b.synth):
+            self.bongo == b.bongo and
+            self.bass == b.bass and
+            self.snare == b.snare and
+            self.ah_ah == b.ah_ah and
+            self.background_vocals == b.background_vocals and
+            self.high_synth == b.high_synth and
+            self.alarm == b.alarm and
+            self.big_synth == b.big_synth and
+            self.bell == b.bell and
+            self.yeah == b.yeah):
             return True
         return False
