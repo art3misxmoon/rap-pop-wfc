@@ -1,4 +1,5 @@
 import mido
+import random
 
 # step 1: translating the midi file
 
@@ -149,7 +150,7 @@ for i in range(int(len(timelines[0])/subdivisions_per_block)):
             id += 1
 
 # prints with repeats
-for i in range(5): 
+for i in range(5):
     print("*****", blocks[i].id, "*****")
     print(vars(blocks[i]))
 
@@ -165,7 +166,7 @@ blocks_no_repeats = []
 for a in blocks:
     repeated = False
     for b in blocks_no_repeats:
-        if a.id == b.id: 
+        if a.id == b.id:
             b.adjacencies1 = addAdjacencies(a.adjacencies1, b.adjacencies1)
             b.adjacencies2 = addAdjacencies(a.adjacencies2, b.adjacencies2)
             repeated = True
@@ -174,6 +175,22 @@ for a in blocks:
 
 # prints without repeats
 print("\n\n\n\n\n")
-for i in blocks_no_repeats: 
+for i in blocks_no_repeats:
     print("*****", i.id, "*****")
     print(vars(i))
+
+class Tile:
+    def __init__(self):
+        self.possibilities = blocks_no_repeats
+        self.observed = False
+        self.tile = None
+
+    def observe(self):
+        if len(self.possibilities) > 0:
+            self.tile = random.choice(self.possibilities)
+            self.observed = True
+        else:
+            raise Exception("no possibilities")
+
+generation_length = 100 # number of tiles in final product
+tiles = [Tile for i in range(generation_length)]
