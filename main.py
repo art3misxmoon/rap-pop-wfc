@@ -114,38 +114,66 @@ class Block:
             return True
         return False
 
-Blocks = []
+blocks = []
 subdivisions_per_block = 4
+id = 0
 for i in range(int(len(timelines[0])/subdivisions_per_block)):
     if i == 0:
-        Blocks.append(Block(
-            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
+        blocks.append(Block(
+            id, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
             timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
             timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
             timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
             timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
             timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
-            {}, {i+1: 1}))
-    elif i > 0 and i < int(len(timelines[0])/subdivisions_per_block) - 1:
-        Blocks.append(Block(
-            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
+            {}, {id+1: 1}))
+        id += 1
+    else:
+        new_block = Block(
+            id, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
             timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
             timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
             timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
             timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
             timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
-            {i-1: 1}, {i+1: 1}))
-    elif i == int(len(timelines[0])/subdivisions_per_block) - 1:
-        Blocks.append(Block(
-            i, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
-            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
-            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
-            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
-            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
-            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
-            {i-1: 1}, {}))
+            {blocks[i-1].id: 1}, {})
+        add_to_id = True
+        for b in blocks:
+            if new_block == b:
+                new_block.id = b.id
+                add_to_id = False
+                break
+        blocks.append(new_block)
+        blocks[i-1].adjacencies2 = {new_block.id: 1}
+        if add_to_id == True: 
+            id += 1
 
 # prints with repeats
 for i in range(5): 
-    print("*****", Blocks[i].id, "*****")
-    print(vars(Blocks[i]))
+    print("*****", blocks[i].id, "*****")
+    print(vars(blocks[i]))
+
+def addAdjacencies(a, b):
+    adjacencies = a | b
+    for key1, value1 in a.items(): 
+        for key2, value2 in b.items(): 
+            if key1 == key2: 
+                adjacencies[key1] = value1 + value2
+    return adjacencies
+
+blocks_no_repeats = []
+for a in blocks:
+    repeated = False
+    for b in blocks_no_repeats:
+        if a.id == b.id: 
+            b.adjacencies1 = addAdjacencies(a.adjacencies1, b.adjacencies1)
+            b.adjacencies2 = addAdjacencies(a.adjacencies2, b.adjacencies2)
+            repeated = True
+    if repeated == False:
+        blocks_no_repeats.append(a)
+
+# prints without repeats
+print("\n\n\n\n\n")
+for i in range(5): 
+    print("*****", blocks_no_repeats[i].id, "*****")
+    print(vars(blocks_no_repeats[i]))
