@@ -174,6 +174,6 @@ for a in blocks:
 
 # prints without repeats
 print("\n\n\n\n\n")
-for i in range(5): 
-    print("*****", blocks_no_repeats[i].id, "*****")
-    print(vars(blocks_no_repeats[i]))
+for i in blocks_no_repeats: 
+    print("*****", i.id, "*****")
+    print(vars(i))
