@@ -56,9 +56,9 @@ for i, track in enumerate(midi.tracks):
         if track[index + 1].time != 0:
             for i in range(last_fill, int(time/24)+1):
                 for j in range(len(playing)):
-                    if playing[j] == True and len(timelines[j]) < (time/24):
+                    if playing[j] and len(timelines[j]) < (time/24):
                         timelines[j].append("on")
-                    if playing[j] == False and len(timelines[j]) < (time/24):
+                    if not playing[j] and len(timelines[j]) < (time/24):
                         timelines[j].append("off")
             last_fill = int(time/24) + 1 # update fill time
 
@@ -146,7 +146,7 @@ for i in range(int(len(timelines[0])/subdivisions_per_block)):
                 break
         blocks.append(new_block)
         blocks[i-1].adjacencies2 = {new_block.id: 1}
-        if add_to_id == True: 
+        if add_to_id: 
             id += 1
 
 # prints with repeats
@@ -170,7 +170,7 @@ for a in blocks:
             b.adjacencies1 = addAdjacencies(a.adjacencies1, b.adjacencies1)
             b.adjacencies2 = addAdjacencies(a.adjacencies2, b.adjacencies2)
             repeated = True
-    if repeated == False:
+    if not repeated:
         blocks_no_repeats.append(a)
 
 # prints without repeats
