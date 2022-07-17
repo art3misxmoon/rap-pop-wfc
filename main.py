@@ -194,3 +194,48 @@ class Tile:
 
 generation_length = 100 # number of tiles in final product
 tiles = [Tile for i in range(generation_length)]
+
+def propagate(tiles, index, tracker = [False for i in range(len(tiles))]):
+    if index < 0 or index >= len(tiles) or tracker[index]:
+        return
+    last = (index == len(tiles) - 1)
+    first = (index == 0)
+    if first: # just to avoid throwing error, inaccurate
+        original_prev = tiles[index]
+    else:
+        original_prev = tiles[index - 1]
+    if last: # just to avoid throwing error, inaccurate
+        original_next = tiles[index]
+    else:
+        original_next = tiles[index + 1]
+
+    if tiles[index].observed:
+        if not first:
+            for possibility in tiles[index - 1].possibilities:
+                if not possibility.id in tiles[index].tile.adjacency1:
+                    tiles[index - 1].possibilities.remove(possibility)
+        if not last:
+            for possibility in tiles[index + 1].possibilities:
+                if not possibility.id in tiles[index].tile.adjacency2:
+                    tiles[index + 1].possibilities.remove(possibility)
+    elif not tiles[index].observed:
+        unobserved_adjacency1 = {}
+        unobserved_adjacency2 = {}
+        for possibility in tiles[index].possibilities:
+            unobserved_adjacency1 = addAdjacencies(unobserved_adjacency1, possibility.adjacency1)
+            unobserved_adjacency2 = addAdjacencies(unobserved_adjacency2, possibility.adjacency2)
+        if not first:
+            for possibility in tiles[index - 1].possibilities:
+                if not possibility.id in unobserved_adjacency1:
+                    tiles[index - 1].possibilities.remove(possibility)
+        if not last:
+            for possibility in tiles[index + 1].possibilities:
+                if not possibility.id in unobserved_adjacency2:
+                    tiles[index + 1].possibilities.remove(possibility)
+    tracker[index] = True
+
+    if not first and original_prev.possibilities != tiles[index - 1].possibilities:
+        propagate(tiles, index - 1, tracker)
+    if not last and original_next.possibilities != tiles[index + 1].possibilities:
+        propagate(tiles, index + 1, tracker)
+    return
