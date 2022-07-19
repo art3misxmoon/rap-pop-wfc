@@ -212,25 +212,25 @@ def propagate(tiles, index, tracker = [False for i in range(len(tiles))]):
     if tiles[index].observed:
         if not first:
             for possibility in tiles[index - 1].possibilities:
-                if not possibility.id in tiles[index].tile.adjacency1:
+                if not possibility.id in tiles[index].tile.adjacencies1:
                     tiles[index - 1].possibilities.remove(possibility)
         if not last:
             for possibility in tiles[index + 1].possibilities:
-                if not possibility.id in tiles[index].tile.adjacency2:
+                if not possibility.id in tiles[index].tile.adjacencies2:
                     tiles[index + 1].possibilities.remove(possibility)
     elif not tiles[index].observed:
-        unobserved_adjacency1 = {}
-        unobserved_adjacency2 = {}
+        unobserved_adjacencies1 = {}
+        unobserved_adjacencies2 = {}
         for possibility in tiles[index].possibilities:
-            unobserved_adjacency1 = addAdjacencies(unobserved_adjacency1, possibility.adjacency1)
-            unobserved_adjacency2 = addAdjacencies(unobserved_adjacency2, possibility.adjacency2)
+            unobserved_adjacencies1 = addAdjacencies(unobserved_adjacencies1, possibility.adjacencies1)
+            unobserved_adjacencies2 = addAdjacencies(unobserved_adjacencies2, possibility.adjacencies2)
         if not first:
             for possibility in tiles[index - 1].possibilities:
-                if not possibility.id in unobserved_adjacency1:
+                if not possibility.id in unobserved_adjacencies1:
                     tiles[index - 1].possibilities.remove(possibility)
         if not last:
             for possibility in tiles[index + 1].possibilities:
-                if not possibility.id in unobserved_adjacency2:
+                if not possibility.id in unobserved_adjacencies2:
                     tiles[index + 1].possibilities.remove(possibility)
     tracker[index] = True
 
