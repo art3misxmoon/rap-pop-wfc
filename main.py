@@ -1,5 +1,6 @@
 import mido
 import random
+from copy import copy
 
 # step 1: translating the midi file
 
@@ -181,7 +182,7 @@ for i in blocks_no_repeats:
 
 class Tile:
     def __init__(self):
-        self.possibilities = blocks_no_repeats
+        self.possibilities = copy(blocks_no_repeats)
         self.observed = False
         self.tile = None
 
@@ -195,19 +196,19 @@ class Tile:
 generation_length = 100 # number of tiles in final product
 tiles = [Tile for i in range(generation_length)]
 
-def propagate(tiles, index, tracker = [False for i in range(len(tiles))]):
+def propagate(tiles, index, tracker):
     if index < 0 or index >= len(tiles) or tracker[index]:
         return
     last = (index == len(tiles) - 1)
     first = (index == 0)
     if first: # just to avoid throwing error, inaccurate
-        original_prev = tiles[index]
+        original_prev = copy(tiles[index].possibilities)
     else:
-        original_prev = tiles[index - 1]
+        original_prev = copy(tiles[index - 1].possibilities)
     if last: # just to avoid throwing error, inaccurate
-        original_next = tiles[index]
+        original_next = copy(tiles[index].possibilities)
     else:
-        original_next = tiles[index + 1]
+        original_next = copy(tiles[index + 1].possibilities)
 
     if tiles[index].observed:
         if not first:
@@ -234,8 +235,8 @@ def propagate(tiles, index, tracker = [False for i in range(len(tiles))]):
                     tiles[index + 1].possibilities.remove(possibility)
     tracker[index] = True
 
-    if not first and original_prev.possibilities != tiles[index - 1].possibilities:
+    if not first and original_prev != tiles[index - 1].possibilities:
         propagate(tiles, index - 1, tracker)
-    if not last and original_next.possibilities != tiles[index + 1].possibilities:
+    if not last and original_next != tiles[index + 1].possibilities:
         propagate(tiles, index + 1, tracker)
     return
