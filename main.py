@@ -65,10 +65,10 @@ for i, track in enumerate(midi.tracks):
 # from bottom to top: yeah, bell, big_synth, alarm, high_synth,
 # background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth
 for i in timelines:
-    str = "::::: "
+    info = "::::: "
     for e in i[:20]:
-        str += ''.join(format(e,'>8'))
-    print(str)
+        info += ''.join(format(e,'>8'))
+    print(info)
 
 # step 3: make a list of 'blocks', representing every possible 1/4 note
 # segment (96 units of time). each block contains an array for each
