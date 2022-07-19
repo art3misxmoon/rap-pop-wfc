@@ -194,7 +194,7 @@ class Tile:
             raise Exception("no possibilities")
 
 generation_length = 100 # number of tiles in final product
-tiles = [Tile for i in range(generation_length)]
+tiles = [Tile() for i in range(generation_length)]
 
 def propagate(tiles, index, tracker):
     if index < 0 or index >= len(tiles) or tracker[index]:
@@ -240,3 +240,34 @@ def propagate(tiles, index, tracker):
     if not last and original_next != tiles[index + 1].possibilities:
         propagate(tiles, index + 1, tracker)
     return
+
+def execute_wfc(tiles):
+    complete = False
+    while not complete:
+        cont = False
+        lowest_entropy = 0
+        while tiles[lowest_entropy].observed:
+            lowest_entropy += 1
+        for i, tile in enumerate(tiles):
+            if len(tile.possibilities) < len(tiles[lowest_entropy].possibilities) and not tile.observed:
+                lowest_entropy = i
+        try:
+            tiles[lowest_entropy].observe()
+            propagate(tiles, lowest_entropy, [False for i in range(len(tiles))])
+        except Exception as e:
+            tiles = [Tile() for i in range(generation_length)]
+            print("restarting:", e)
+            pass
+        for tile in tiles:
+            if not tile.observed:
+                cont = True
+        if not cont:
+            complete = True
+
+execute_wfc(tiles)
+
+for tile in tiles: 
+    if tile.observed:
+        print(tile.tile.id)
+    else:
+        print("None")
