@@ -4,7 +4,7 @@ from copy import copy
 
 # step 1: translating the midi file
 
-midi = mido.MidiFile('3005.mid') # defines the file as a MidiFile type
+midi = mido.MidiFile('input/3005.mid') # defines the file as a MidiFile type
 
 # prints each message from the midi file tracks. 
 # note-on turns the note on, note-off turns the note off. 
