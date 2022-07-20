@@ -3,29 +3,15 @@ import random
 from copy import copy
 
 # step 1: translating the midi file
-
-midi = mido.MidiFile('input/3005.mid') # defines the file as a MidiFile type
-
-# prints each message from the midi file tracks. 
-# note-on turns the note on, note-off turns the note off. 
-# note, in this case, is which instrument is playing. 
-# time is the time since the last msg (24 time = 1/16 note). 
-# channel and velocity are not relevant for now. 
 # docs:
 # https://mido.readthedocs.io/en/latest/messages.html#control-changes
+midi = mido.MidiFile('input/3005.mid')
 for i, track in enumerate(midi.tracks):
     print('Track {}: {}'.format(i, track.name))
-    for msg in track:
-        print(msg)
+#     for msg in track:
+#       print(msg)
 
 # step 2: parse the MidiFile and translate to a structure we can use
-# 1 array for each instrument, and each element of the array
-# representing 24 units of time. each element of the array is either:
-# a string "off" meaning the instrument isn't playing
-# a string "on-off" meaning the instrument stops on that beat
-# a string "on" meaning the instrument is playing
-# a string "off-on" meaning the instrument starts on that beat
-
 number_of_instruments = 12
 playing = [False for i in range(number_of_instruments)]
 timelines = [[] for i in range(number_of_instruments)]
@@ -34,7 +20,6 @@ time = 0  # time attribute, in special units
 last_fill = 0  # index of last fill of empty spots
 
 for i, track in enumerate(midi.tracks):
-    print('Track {}: {}'.format(i, track.name))
     for index, msg in enumerate(track):
         time += int(msg.time)
         if msg.is_meta:
@@ -65,20 +50,14 @@ for i, track in enumerate(midi.tracks):
 
 # from bottom to top: yeah, bell, big_synth, alarm, high_synth,
 # background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth
-for i in timelines:
-    info = "::::: "
-    for e in i[:20]:
-        info += ''.join(format(e,'>8'))
-    print(info)
+# for i in timelines:
+#     info = "::::: "
+#     for e in i[:20]:
+#         info += ''.join(format(e,'>8'))
+#     print(info)
 
 # step 3: make a list of 'blocks', representing every possible 1/4 note
-# segment (96 units of time). each block contains an array for each
-# instrument, with each element a string (same definitions as above).
-# each element of the array represents one of four subdivisions, or a
-# 1/16 note. in addition, it should contain two dictionaries, each one
-# containing possibles adjacencies and their probabilities before/after
-# the block.
-
+# segment (96 units of time)
 class Block:
     def __init__(
             self, name, synth, spacey_synth, bongo, bass, snare, ah_ah,
@@ -150,11 +129,6 @@ for i in range(int(len(timelines[0])/subdivisions_per_block)):
         if add_to_id: 
             id += 1
 
-# prints with repeats
-for i in range(5):
-    print("*****", blocks[i].id, "*****")
-    print(vars(blocks[i]))
-
 def addAdjacencies(a, b):
     adjacencies = a | b
     for key1, value1 in a.items(): 
@@ -175,10 +149,10 @@ for a in blocks:
         blocks_no_repeats.append(a)
 
 # prints without repeats
-print("\n\n\n\n\n")
-for i in blocks_no_repeats:
-    print("*****", i.id, "*****")
-    print(vars(i))
+# print("\n\n\n\n\n")
+# for i in blocks_no_repeats:
+#     print("*****", i.id, "*****")
+#     print(vars(i))
 
 class Tile:
     def __init__(self):
@@ -266,8 +240,11 @@ def execute_wfc(tiles):
 
 execute_wfc(tiles)
 
+info = "\nlist of tiles: "
 for tile in tiles: 
-    if tile.observed:
-        print(tile.tile.id)
+    if tile is None:
+        info += "None"
     else:
-        print("None")
+        info += str(tile.tile.id)
+    info += "   "
+print(info)
