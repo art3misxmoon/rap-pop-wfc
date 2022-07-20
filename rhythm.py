@@ -5,9 +5,9 @@ from copy import copy
 # step 1: translating the midi file
 # docs:
 # https://mido.readthedocs.io/en/latest/messages.html#control-changes
-midi = mido.MidiFile('input/3005.mid')
+midi = mido.MidiFile("input/3005.mid")
 for i, track in enumerate(midi.tracks):
-    print('Track {}: {}'.format(i, track.name))
+    print("Track {}: {}".format(i, track.name))
 #     for msg in track:
 #       print(msg)
 
@@ -24,15 +24,15 @@ for i, track in enumerate(midi.tracks):
         time += int(msg.time)
         if msg.is_meta:
             continue
-        instrument = msg.note-36
-        if msg.type == "note_off": 
+        instrument = msg.note - 36
+        if msg.type == "note_off":
             # fills in all spots until instrument state change
-            for i in range(last_fill, int(time/24)): 
+            for i in range(last_fill, int(time / 24)):
                 timelines[instrument].append("on")
             timelines[instrument].append("on-off")
-        elif msg.type == "note_on": 
+        elif msg.type == "note_on":
             # fills in all spots until instrument state change
-            for i in range(last_fill, int(time/24)):
+            for i in range(last_fill, int(time / 24)):
                 timelines[instrument].append("off")
             timelines[instrument].append("off-on")
         playing[instrument] = not playing[instrument]
@@ -40,13 +40,13 @@ for i, track in enumerate(midi.tracks):
         # if there aren't anymore instruments to change status of at
         # this time
         if track[index + 1].time != 0:
-            for i in range(last_fill, int(time/24)+1):
+            for i in range(last_fill, int(time / 24) + 1):
                 for j in range(len(playing)):
-                    if playing[j] and len(timelines[j]) < (time/24):
+                    if playing[j] and len(timelines[j]) < (time / 24):
                         timelines[j].append("on")
-                    if not playing[j] and len(timelines[j]) < (time/24):
+                    if not playing[j] and len(timelines[j]) < (time / 24):
                         timelines[j].append("off")
-            last_fill = int(time/24) + 1 # update fill time
+            last_fill = int(time / 24) + 1  # update fill time
 
 # from bottom to top: yeah, bell, big_synth, alarm, high_synth,
 # background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth
@@ -60,9 +60,23 @@ for i, track in enumerate(midi.tracks):
 # segment (96 units of time)
 class Block:
     def __init__(
-            self, name, synth, spacey_synth, bongo, bass, snare, ah_ah,
-            background_vocals, high_synth, alarm, big_synth, bell, yeah,
-            adjacencies1, adjacencies2):
+        self,
+        name,
+        synth,
+        spacey_synth,
+        bongo,
+        bass,
+        snare,
+        ah_ah,
+        background_vocals,
+        high_synth,
+        alarm,
+        big_synth,
+        bell,
+        yeah,
+        adjacencies1,
+        adjacencies2,
+    ):
         self.id = name
         self.synth = synth
         self.spacey_synth = spacey_synth
@@ -80,44 +94,67 @@ class Block:
         self.adjacencies2 = adjacencies2
 
     def __eq__(self, b):
-        if (self.synth == b.synth and
-            self.spacey_synth == b.spacey_synth and
-            self.bongo == b.bongo and
-            self.bass == b.bass and
-            self.snare == b.snare and
-            self.ah_ah == b.ah_ah and
-            self.background_vocals == b.background_vocals and
-            self.high_synth == b.high_synth and
-            self.alarm == b.alarm and
-            self.big_synth == b.big_synth and
-            self.bell == b.bell and
-            self.yeah == b.yeah):
+        if (
+            self.synth == b.synth
+            and self.spacey_synth == b.spacey_synth
+            and self.bongo == b.bongo
+            and self.bass == b.bass
+            and self.snare == b.snare
+            and self.ah_ah == b.ah_ah
+            and self.background_vocals == b.background_vocals
+            and self.high_synth == b.high_synth
+            and self.alarm == b.alarm
+            and self.big_synth == b.big_synth
+            and self.bell == b.bell
+            and self.yeah == b.yeah
+        ):
             return True
         return False
+
 
 blocks = []
 subdivisions_per_block = 4
 id = 0
-for i in range(int(len(timelines[0])/subdivisions_per_block)):
+for i in range(int(len(timelines[0]) / subdivisions_per_block)):
     if i == 0:
-        blocks.append(Block(
-            id, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
-            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
-            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
-            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
-            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
-            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
-            {}, {id+1: 1}))
+        blocks.append(
+            Block(
+                id,
+                timelines[0][i * 4 : (i + 1) * 4],
+                timelines[1][i * 4 : (i + 1) * 4],
+                timelines[2][i * 4 : (i + 1) * 4],
+                timelines[3][i * 4 : (i + 1) * 4],
+                timelines[4][i * 4 : (i + 1) * 4],
+                timelines[5][i * 4 : (i + 1) * 4],
+                timelines[6][i * 4 : (i + 1) * 4],
+                timelines[7][i * 4 : (i + 1) * 4],
+                timelines[8][i * 4 : (i + 1) * 4],
+                timelines[9][i * 4 : (i + 1) * 4],
+                timelines[10][i * 4 : (i + 1) * 4],
+                timelines[11][i * 4 : (i + 1) * 4],
+                {},
+                {id + 1: 1},
+            )
+        )
         id += 1
     else:
         new_block = Block(
-            id, timelines[0][i*4:(i+1)*4], timelines[1][i*4:(i+1)*4],
-            timelines[2][i*4:(i+1)*4], timelines[3][i*4:(i+1)*4],
-            timelines[4][i*4:(i+1)*4], timelines[5][i*4:(i+1)*4],
-            timelines[6][i*4:(i+1)*4], timelines[7][i*4:(i+1)*4],
-            timelines[8][i*4:(i+1)*4], timelines[9][i*4:(i+1)*4],
-            timelines[10][i*4:(i+1)*4], timelines[11][i*4:(i+1)*4],
-            {blocks[i-1].id: 1}, {})
+            id,
+            timelines[0][i * 4 : (i + 1) * 4],
+            timelines[1][i * 4 : (i + 1) * 4],
+            timelines[2][i * 4 : (i + 1) * 4],
+            timelines[3][i * 4 : (i + 1) * 4],
+            timelines[4][i * 4 : (i + 1) * 4],
+            timelines[5][i * 4 : (i + 1) * 4],
+            timelines[6][i * 4 : (i + 1) * 4],
+            timelines[7][i * 4 : (i + 1) * 4],
+            timelines[8][i * 4 : (i + 1) * 4],
+            timelines[9][i * 4 : (i + 1) * 4],
+            timelines[10][i * 4 : (i + 1) * 4],
+            timelines[11][i * 4 : (i + 1) * 4],
+            {blocks[i - 1].id: 1},
+            {},
+        )
         add_to_id = True
         for b in blocks:
             if new_block == b:
@@ -125,17 +162,19 @@ for i in range(int(len(timelines[0])/subdivisions_per_block)):
                 add_to_id = False
                 break
         blocks.append(new_block)
-        blocks[i-1].adjacencies2 = {new_block.id: 1}
-        if add_to_id: 
+        blocks[i - 1].adjacencies2 = {new_block.id: 1}
+        if add_to_id:
             id += 1
+
 
 def addAdjacencies(a, b):
     adjacencies = a | b
-    for key1, value1 in a.items(): 
-        for key2, value2 in b.items(): 
-            if key1 == key2: 
+    for key1, value1 in a.items():
+        for key2, value2 in b.items():
+            if key1 == key2:
                 adjacencies[key1] = value1 + value2
     return adjacencies
+
 
 blocks_no_repeats = []
 for a in blocks:
@@ -154,6 +193,7 @@ for a in blocks:
 #     print("*****", i.id, "*****")
 #     print(vars(i))
 
+
 class Tile:
     def __init__(self):
         self.possibilities = copy(blocks_no_repeats)
@@ -167,19 +207,21 @@ class Tile:
         else:
             raise Exception("no possibilities")
 
-generation_length = 100 # number of tiles in final product
+
+generation_length = 100  # number of tiles in final product
 tiles = [Tile() for i in range(generation_length)]
+
 
 def propagate(tiles, index, tracker):
     if index < 0 or index >= len(tiles) or tracker[index]:
         return
-    last = (index == len(tiles) - 1)
-    first = (index == 0)
-    if first: # just to avoid throwing error, inaccurate
+    last = index == len(tiles) - 1
+    first = index == 0
+    if first:  # just to avoid throwing error, inaccurate
         original_prev = copy(tiles[index].possibilities)
     else:
         original_prev = copy(tiles[index - 1].possibilities)
-    if last: # just to avoid throwing error, inaccurate
+    if last:  # just to avoid throwing error, inaccurate
         original_next = copy(tiles[index].possibilities)
     else:
         original_next = copy(tiles[index + 1].possibilities)
@@ -197,8 +239,12 @@ def propagate(tiles, index, tracker):
         unobserved_adjacencies1 = {}
         unobserved_adjacencies2 = {}
         for possibility in tiles[index].possibilities:
-            unobserved_adjacencies1 = addAdjacencies(unobserved_adjacencies1, possibility.adjacencies1)
-            unobserved_adjacencies2 = addAdjacencies(unobserved_adjacencies2, possibility.adjacencies2)
+            unobserved_adjacencies1 = addAdjacencies(
+                unobserved_adjacencies1, possibility.adjacencies1
+            )
+            unobserved_adjacencies2 = addAdjacencies(
+                unobserved_adjacencies2, possibility.adjacencies2
+            )
         if not first:
             for possibility in tiles[index - 1].possibilities:
                 if not possibility.id in unobserved_adjacencies1:
@@ -215,6 +261,7 @@ def propagate(tiles, index, tracker):
         propagate(tiles, index + 1, tracker)
     return
 
+
 def execute_wfc(tiles):
     complete = False
     while not complete:
@@ -223,7 +270,10 @@ def execute_wfc(tiles):
         while tiles[lowest_entropy].observed:
             lowest_entropy += 1
         for i, tile in enumerate(tiles):
-            if len(tile.possibilities) < len(tiles[lowest_entropy].possibilities) and not tile.observed:
+            if (
+                len(tile.possibilities) < len(tiles[lowest_entropy].possibilities)
+                and not tile.observed
+            ):
                 lowest_entropy = i
         try:
             tiles[lowest_entropy].observe()
@@ -238,10 +288,11 @@ def execute_wfc(tiles):
         if not cont:
             complete = True
 
+
 execute_wfc(tiles)
 
 info = "\nlist of tiles: "
-for tile in tiles: 
+for tile in tiles:
     if tile is None:
         info += "None"
     else:
