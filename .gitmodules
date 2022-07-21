@@ -1,0 +1,3 @@
+[submodule "oisin"]
+	path = oisin
+	url = https://github.com/mewo2/oisin.git
