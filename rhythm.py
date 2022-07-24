@@ -196,13 +196,31 @@ for a in blocks:
 
 class Tile:
     def __init__(self):
-        self.possibilities = copy(blocks_no_repeats)
+        self.possibilities = [
+            [blocks_no_repeats[i], 0] for i in range(len(blocks_no_repeats))
+        ]
         self.observed = False
         self.tile = None
 
     def observe(self):
+        untouched = True
+        for possibility in self.possibilities:
+            if possibility[1] != 0:
+                untouched = False
         if len(self.possibilities) > 0:
-            self.tile = random.choice(self.possibilities)
+            if untouched:
+                self.tile = random.choice(self.possibilities)[0]
+            if not untouched:
+                total = 0
+                for possibility in self.possibilities:
+                    total += possibility[1]
+                choice = random.randint(0, total - 1)
+                for possibility in self.possibilities:
+                    if choice < possibility[1]:
+                        self.tile = possibility[0]
+                        break
+                    else:
+                        choice -= possibility[1]
             self.observed = True
         else:
             raise Exception("no possibilities")
@@ -211,7 +229,7 @@ class Tile:
 generation_length = 100  # number of tiles in final product
 tiles = [Tile() for i in range(generation_length)]
 
-
+# using additive method of probability in this version, to create choices with greater success rate
 def propagate(tiles, index, tracker):
     if index < 0 or index >= len(tiles) or tracker[index]:
         return
@@ -229,30 +247,38 @@ def propagate(tiles, index, tracker):
     if tiles[index].observed:
         if not first:
             for possibility in tiles[index - 1].possibilities:
-                if not possibility.id in tiles[index].tile.adjacencies1:
-                    tiles[index - 1].possibilities.remove(possibility)
+                if possibility[0].id in tiles[index].tile.adjacencies1:
+                    possibility[1] += tiles[index].tile.adjacencies1[possibility[0].id]
+                else:
+                    possibility[1] = 0
         if not last:
             for possibility in tiles[index + 1].possibilities:
-                if not possibility.id in tiles[index].tile.adjacencies2:
-                    tiles[index + 1].possibilities.remove(possibility)
+                if possibility[0].id in tiles[index].tile.adjacencies2:
+                    possibility[1] += tiles[index].tile.adjacencies2[possibility[0].id]
+                if not possibility[0].id in tiles[index].tile.adjacencies2:
+                    possibility[1] = 0
     elif not tiles[index].observed:
         unobserved_adjacencies1 = {}
         unobserved_adjacencies2 = {}
         for possibility in tiles[index].possibilities:
             unobserved_adjacencies1 = addAdjacencies(
-                unobserved_adjacencies1, possibility.adjacencies1
+                unobserved_adjacencies1, possibility[0].adjacencies1
             )
             unobserved_adjacencies2 = addAdjacencies(
-                unobserved_adjacencies2, possibility.adjacencies2
+                unobserved_adjacencies2, possibility[0].adjacencies2
             )
         if not first:
             for possibility in tiles[index - 1].possibilities:
-                if not possibility.id in unobserved_adjacencies1:
-                    tiles[index - 1].possibilities.remove(possibility)
+                if possibility[0].id in unobserved_adjacencies1:
+                    possibility[1] += unobserved_adjacencies1[possibility[0].id]
+                else:
+                    possibility[1] = 0
         if not last:
             for possibility in tiles[index + 1].possibilities:
-                if not possibility.id in unobserved_adjacencies2:
-                    tiles[index + 1].possibilities.remove(possibility)
+                if possibility[0].id in unobserved_adjacencies2:
+                    possibility[1] += unobserved_adjacencies2[possibility[0].id]
+                if not possibility[0].id in unobserved_adjacencies2:
+                    possibility[1] = 0
     tracker[index] = True
 
     if not first and original_prev != tiles[index - 1].possibilities:
@@ -277,11 +303,11 @@ def execute_wfc(tiles):
                 lowest_entropy = i
         try:
             tiles[lowest_entropy].observe()
-            propagate(tiles, lowest_entropy, [False for i in range(len(tiles))])
         except Exception as e:
             tiles = [Tile() for i in range(generation_length)]
             print("restarting:", e)
             pass
+        propagate(tiles, lowest_entropy, [False for i in range(len(tiles))])
         for tile in tiles:
             if not tile.observed:
                 cont = True
