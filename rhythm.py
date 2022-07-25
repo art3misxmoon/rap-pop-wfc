@@ -92,6 +92,7 @@ class Block:
         self.yeah = yeah
         self.adjacencies1 = adjacencies1
         self.adjacencies2 = adjacencies2
+        self.occurences = 0
 
     def __eq__(self, b):
         if (
@@ -183,9 +184,11 @@ for a in blocks:
         if a.id == b.id:
             b.adjacencies1 = addAdjacencies(a.adjacencies1, b.adjacencies1)
             b.adjacencies2 = addAdjacencies(a.adjacencies2, b.adjacencies2)
+            b.occurences += 1
             repeated = True
     if not repeated:
         blocks_no_repeats.append(a)
+        a.occurences += 1
 
 # prints without repeats
 # print("\n\n\n\n\n")
@@ -225,8 +228,7 @@ class Tile:
         else:
             raise Exception("no possibilities")
 
-
-generation_length = 100  # number of tiles in final product
+generation_length = len(blocks)  # number of tiles in final product
 tiles = [Tile() for i in range(generation_length)]
 
 # using additive method of probability in this version, to create choices with greater success rate
@@ -325,3 +327,31 @@ for tile in tiles:
         info += str(tile.tile.id)
     info += "   "
 print(info)
+
+top = 20
+leaderboard_blocks = copy(blocks_no_repeats)
+print("top " + str(top) + " blocks from 3005: ")
+for i in range(top):
+    max_occurences = leaderboard_blocks[0]
+    for block in leaderboard_blocks:
+        if block.occurences > max_occurences.occurences:
+            max_occurences = block
+    print(str(i+1) + ". " + str(max_occurences.id) + "---" + str(max_occurences.occurences))
+    leaderboard_blocks.remove(max_occurences)
+
+print("top " + str(top) + " blocks from generation: ")
+occurences = {}
+for tile in tiles:
+    if tile.tile.id in occurences:
+        occurences[tile.tile.id] += 1
+    else:
+        occurences[tile.tile.id] = 1
+for i in range(top):
+    max_occurences2 = None
+    for k,v in occurences.items():
+        if max_occurences2 == None:
+            max_occurences2 = k
+        if v > occurences[max_occurences2]:
+            max_occurences2 = k
+    print(str(i+1) + ". " + str(max_occurences2) + "---" + str(occurences[max_occurences2]))
+    occurences.pop(max_occurences2)
