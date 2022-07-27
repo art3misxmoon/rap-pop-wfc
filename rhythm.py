@@ -13,6 +13,7 @@ for i, track in enumerate(midi.tracks):
 
 # step 2: parse the MidiFile and translate to a structure we can use
 number_of_instruments = 12
+sixteenth = midi.ticks_per_beat / 4
 playing = [False for i in range(number_of_instruments)]
 timelines = [[] for i in range(number_of_instruments)]
 instrument = 0
@@ -27,12 +28,12 @@ for i, track in enumerate(midi.tracks):
         instrument = msg.note - 36
         if msg.type == "note_off":
             # fills in all spots until instrument state change
-            for i in range(last_fill, int(time / 24)):
+            for i in range(last_fill, int(time / sixteenth)):
                 timelines[instrument].append("on")
             timelines[instrument].append("on-off")
         elif msg.type == "note_on":
             # fills in all spots until instrument state change
-            for i in range(last_fill, int(time / 24)):
+            for i in range(last_fill, int(time / sixteenth)):
                 timelines[instrument].append("off")
             timelines[instrument].append("off-on")
         playing[instrument] = not playing[instrument]
@@ -40,13 +41,13 @@ for i, track in enumerate(midi.tracks):
         # if there aren't anymore instruments to change status of at
         # this time
         if track[index + 1].time != 0:
-            for i in range(last_fill, int(time / 24) + 1):
+            for i in range(last_fill, int(time / sixteenth) + 1):
                 for j in range(len(playing)):
-                    if playing[j] and len(timelines[j]) < (time / 24):
+                    if playing[j] and len(timelines[j]) < (time / sixteenth):
                         timelines[j].append("on")
-                    if not playing[j] and len(timelines[j]) < (time / 24):
+                    if not playing[j] and len(timelines[j]) < (time / sixteenth):
                         timelines[j].append("off")
-            last_fill = int(time / 24) + 1  # update fill time
+            last_fill = int(time / sixteenth) + 1  # update fill time
 
 # from bottom to top: yeah, bell, big_synth, alarm, high_synth,
 # background_vocals, ah_ah, snare, bass, bongo, spacey_synth, synth
@@ -90,25 +91,26 @@ class Block:
         self.big_synth = big_synth
         self.bell = bell
         self.yeah = yeah
+        self.instruments = [
+            self.synth,
+            self.spacey_synth,
+            self.bongo,
+            self.bass,
+            self.snare,
+            self.ah_ah,
+            self.background_vocals,
+            self.high_synth,
+            self.alarm,
+            self.big_synth,
+            self.bell,
+            self.yeah
+        ]
         self.adjacencies1 = adjacencies1
         self.adjacencies2 = adjacencies2
         self.occurences = 0
 
     def __eq__(self, b):
-        if (
-            self.synth == b.synth
-            and self.spacey_synth == b.spacey_synth
-            and self.bongo == b.bongo
-            and self.bass == b.bass
-            and self.snare == b.snare
-            and self.ah_ah == b.ah_ah
-            and self.background_vocals == b.background_vocals
-            and self.high_synth == b.high_synth
-            and self.alarm == b.alarm
-            and self.big_synth == b.big_synth
-            and self.bell == b.bell
-            and self.yeah == b.yeah
-        ):
+        if self.instruments == b.instruments:
             return True
         return False
 
