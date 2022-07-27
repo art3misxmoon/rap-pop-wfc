@@ -370,3 +370,43 @@ for i in range(top):
         + str(occurences[max_occurences2])
     )
     occurences.pop(max_occurences2)
+
+output = mido.MidiFile()
+track = mido.MidiTrack()
+output.tracks.append(track)
+
+track.append(midi.tracks[0][1])  # appends same metamessage as original
+
+
+def appendMessages(block, last_msg):
+    for i in range(subdivisions_per_block):
+        for j, instrument in enumerate(block.instruments):
+            if instrument[i] == "on-off":
+                track.append(
+                    mido.Message(
+                        "note_off",
+                        note=j + 36,
+                        velocity=64,
+                        time=int(sixteenth * last_msg),
+                    )
+                )
+                last_msg = 0
+            elif instrument[i] == "off-on":
+                track.append(
+                    mido.Message(
+                        "note_on",
+                        note=j + 36,
+                        velocity=64,
+                        time=int(sixteenth * last_msg),
+                    )
+                )
+                last_msg = 0
+        last_msg += 1
+    return last_msg
+
+
+last_msg = 0
+for tile in tiles:
+    last_msg = appendMessages(tile.tile, last_msg)
+    last_msg += 1
+output.save("output.mid")
