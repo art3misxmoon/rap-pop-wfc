@@ -103,7 +103,7 @@ class Block:
             self.alarm,
             self.big_synth,
             self.bell,
-            self.yeah
+            self.yeah,
         ]
         self.adjacencies1 = adjacencies1
         self.adjacencies2 = adjacencies2
