@@ -228,6 +228,7 @@ class Tile:
         else:
             raise Exception("no possibilities")
 
+
 generation_length = len(blocks)  # number of tiles in final product
 tiles = [Tile() for i in range(generation_length)]
 
@@ -336,7 +337,13 @@ for i in range(top):
     for block in leaderboard_blocks:
         if block.occurences > max_occurences.occurences:
             max_occurences = block
-    print(str(i+1) + ". " + str(max_occurences.id) + "---" + str(max_occurences.occurences))
+    print(
+        str(i + 1)
+        + ". "
+        + str(max_occurences.id)
+        + "---"
+        + str(max_occurences.occurences)
+    )
     leaderboard_blocks.remove(max_occurences)
 
 print("top " + str(top) + " blocks from generation: ")
@@ -348,10 +355,16 @@ for tile in tiles:
         occurences[tile.tile.id] = 1
 for i in range(top):
     max_occurences2 = None
-    for k,v in occurences.items():
+    for k, v in occurences.items():
         if max_occurences2 == None:
             max_occurences2 = k
         if v > occurences[max_occurences2]:
             max_occurences2 = k
-    print(str(i+1) + ". " + str(max_occurences2) + "---" + str(occurences[max_occurences2]))
+    print(
+        str(i + 1)
+        + ". "
+        + str(max_occurences2)
+        + "---"
+        + str(occurences[max_occurences2])
+    )
     occurences.pop(max_occurences2)
