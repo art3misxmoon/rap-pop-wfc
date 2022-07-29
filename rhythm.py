@@ -123,18 +123,42 @@ for i in range(int(len(timelines[0]) / subdivisions_per_block)):
         blocks.append(
             Block(
                 id,
-                timelines[0][i * 4 : (i + 1) * 4],
-                timelines[1][i * 4 : (i + 1) * 4],
-                timelines[2][i * 4 : (i + 1) * 4],
-                timelines[3][i * 4 : (i + 1) * 4],
-                timelines[4][i * 4 : (i + 1) * 4],
-                timelines[5][i * 4 : (i + 1) * 4],
-                timelines[6][i * 4 : (i + 1) * 4],
-                timelines[7][i * 4 : (i + 1) * 4],
-                timelines[8][i * 4 : (i + 1) * 4],
-                timelines[9][i * 4 : (i + 1) * 4],
-                timelines[10][i * 4 : (i + 1) * 4],
-                timelines[11][i * 4 : (i + 1) * 4],
+                timelines[0][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[1][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[2][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[3][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[4][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[5][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[6][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[7][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[8][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[9][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[10][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
+                timelines[11][
+                    i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+                ],
                 {},
                 {id + 1: 1},
             )
@@ -143,18 +167,22 @@ for i in range(int(len(timelines[0]) / subdivisions_per_block)):
     else:
         new_block = Block(
             id,
-            timelines[0][i * 4 : (i + 1) * 4],
-            timelines[1][i * 4 : (i + 1) * 4],
-            timelines[2][i * 4 : (i + 1) * 4],
-            timelines[3][i * 4 : (i + 1) * 4],
-            timelines[4][i * 4 : (i + 1) * 4],
-            timelines[5][i * 4 : (i + 1) * 4],
-            timelines[6][i * 4 : (i + 1) * 4],
-            timelines[7][i * 4 : (i + 1) * 4],
-            timelines[8][i * 4 : (i + 1) * 4],
-            timelines[9][i * 4 : (i + 1) * 4],
-            timelines[10][i * 4 : (i + 1) * 4],
-            timelines[11][i * 4 : (i + 1) * 4],
+            timelines[0][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[1][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[2][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[3][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[4][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[5][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[6][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[7][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[8][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[9][i * subdivisions_per_block : (i + 1) * subdivisions_per_block],
+            timelines[10][
+                i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+            ],
+            timelines[11][
+                i * subdivisions_per_block : (i + 1) * subdivisions_per_block
+            ],
             {blocks[i - 1].id: 1},
             {},
         )
