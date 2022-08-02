@@ -28,6 +28,17 @@ def rhythmLine(line, rhyme):
     elements = tuple(lineWithoutSpaces)
     return oisin.Line([elements], rhyme)
 
+def createVerse(arrayOfLines):
+    rhythm = []
+    x = 0
+    while True:
+        rhythm.append(rhythmLine(arrayOfLines[x], 'a'))
+        x += 1
+        if x >= len(arrayOfLines):
+            break;
+    return rhythm
+
+
 oisin.balladize(
-    oisin.load(filename), meter=[rhythmLine(line, 'a'), rhythmLine(line, 'b'), rhythmLine(line, 'a')], step=50, order=2
+    oisin.load(filename), meter=createVerse([". / . . / . . / / .", "/ . . . . / . .", "/ . / ."]), step=50, order=2
 )
