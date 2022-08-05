@@ -10,7 +10,16 @@ except IndexError:
 
 tripletrhythmcouplet = [ oisin.Line([('-', '.', '.', '.', '.', '.', '-', '.', '.')], 'a' ), oisin.Line([('-', '.', '.', '.', '.', '-', '.', '.')], 'a' ) ]
 
-line = ". / . . / . . / / ."
+verse1 = [". / . . . / . . . /", ". . . / . / . . . /", "/ . / . / . / . / . . /", "/ . / . . / / ."]
+verse2 = ["/ . / . / . / . . / . . / / .", "/ . . / . . / . / . / . .", ". . / . . / . / . . /", "/ . / . / . / . . . / . . / /", "/ . / . /"]
+verse3 = ["/ . / . . / . . / .", "/ / . / / . / / . . / .", ". . / . / / . / . / . . / .", "/ . / . . / . . . / . . / .", ". . / . . / . . / . / . . / .", "/ . . / . . / . . . . / . . / ."]
+verse4 = [". / . / . . / / . / . . / . .", " . . / . . / . . . / . . / . ."]
+verse5 = ["/ . . . . . / . .", "/ . . . . / . .", "/ . . . . / . .", "/ . . . . / . .", "/ . . . / . . / ."]
+verse6 = [". / . . . / . /", ". / . . /", "/ / . . . . . . / . .", ". / . . . . / . . / . / .", ". / . . / . . . . / .", ". / . . / . / ."]
+verse7 = [". / . . / .", ". / . . / .", ". / . . / .", ". / . . / ."]
+verse8 = [". / . / . / / . . / . / .", ". / . . / . . / . . / .", "/ . . / .", ". / . . / . . / ."]
+
+
 # produces a line of verse with dictated word stress
 # @param word stress patterm  ex: "/ . . . / . ."
 def rhythmLine(line, rhyme):
@@ -40,5 +49,6 @@ def createVerse(arrayOfLines):
 
 
 oisin.balladize(
-    oisin.load(filename), meter=createVerse([". / . . / . . / / .", "/ . . . . / . .", "/ . / ."]), step=50, order=2
+    oisin.load(filename), meter=createVerse(verse8), step=50, order=2
 )
+
