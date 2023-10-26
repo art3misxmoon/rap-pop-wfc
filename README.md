@@ -15,7 +15,7 @@ Oisín project](https://github.com/mewo2/oisin/tree/0e391d6dbbf931c2257a7625682a
 - [the Piano Teacher game](https://creativecoding.soe.ucsc.edu/courses/cmpm202_w20/_schedule/Pettitt_202.pdf) created by Jared Pettitt, Celeste C. Jewett,
 and Tamara Duplantis to generate example pieces for learning pianists. 
 
-##Our Research
+## Our Research
 
 In our research, we applied WFC to both MIDI beat and lyric generation,
 specifically generating contemporary hip-hop music based on input from
